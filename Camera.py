@@ -12,8 +12,9 @@ class Camera:
 		self.v_fov = self.h_fov * (render.HEIGHT / render.WIDTH)
 		self.near_plane = 0.1
 		self.far_plane = 100
-		self.moving_speed = 0.02
-		self.rotation_speed = 0.01
+		self.moving_speed = 0.04
+		self.rotation_speed = 0.02
+		self.font = pg.font.SysFont('Arial', 20, bold=True)
 
 	def control(self):
 		key = pg.key.get_pressed()
@@ -55,7 +56,7 @@ class Camera:
 		x, y, z, w = self.position
 		return np.array([
 			[1, 0, 0, 0],
-			[0, 1, 0, 1],
+			[0, 1, 0, 0],
 			[0, 0, 1, 0],
 			[-x, -y, -z, 1]
 		])
@@ -72,4 +73,15 @@ class Camera:
 		])
 
 	def camera_matrix(self):
+
+		up_text = self.font.render(f"Up: {self.up}", True, (255, 255, 255))
+		forward_text = self.font.render(f"Up: {self.forward}", True, (255, 255, 255))
+		right_text = self.font.render(f"Up: {self.right}", True, (255, 255, 255))
+
+		self.render.screen.blit(up_text, (10, 10))
+		self.render.screen.blit(forward_text, (10, 30))
+		self.render.screen.blit(right_text, (10, 50))
+
+
 		return self.translate_matrix() @ self.rotate_matrix()
+
