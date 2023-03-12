@@ -7,12 +7,11 @@ class Object3D:
 		self.vertexes = np.array([(0, 0, 0, 1), (0, 1, 0, 1), (1, 1, 0, 1), (1, 0, 0, 1), 
 								  (0, 0, 1, 1), (0, 1, 1, 1), (1, 1, 1, 1), (1, 0, 1, 1)])
 		self.faces = np.array([(0, 1, 2, 3), (4, 5, 6, 7), (0, 4, 5, 1), (2, 3, 7, 6), (1, 2, 6, 5), (0, 3, 7, 4)])
-
 		self.font = pg.font.SysFont('Arial', 20, bold=True)
 		self.color_faces = [(pg.Color('orange'), face) for face in self.faces]
 		self.movemen_flag, self.draw_vertexes = True, True
 		self.label = ''
-
+		self.moving_speed = 0.0001
 
 	def draw(self):
 		self.screen_projection()
@@ -38,6 +37,33 @@ class Object3D:
 			for vertex in vertexes:
 				if not np.any((vertex == self.render.H_WIDTH) | (vertex == self.render.H_HEIGHT)):
 					pg.draw.circle(self.render.screen, pg.Color('white'), vertex, 6)
+
+	def control(self):
+		pos = self.vertexes[0]
+		key = pg.key.get_pressed()
+		if key[pg.K_a]:
+			pos[1] += self.moving_speed
+			self.translate(pos[:-1])
+		if key[pg.K_d]:
+			pos[1] -= self.moving_speed
+			self.translate(pos[:-1])
+		if key[pg.K_w]:
+			self.position += self.forward * self.moving_speed
+		if key[pg.K_s]:
+			self.position -= self.forward * self.moving_speed
+		if key[pg.K_q]:
+			self.position += self.up * self.moving_speed
+		if key[pg.K_e]:
+			self.position -= self.up * self.moving_speed
+
+		if key[pg.K_LEFT]:
+			self.camera_yaw(-self.rotation_speed)
+		if key[pg.K_RIGHT]:
+			self.camera_yaw(self.rotation_speed)
+		if key[pg.K_UP]:
+			self.camera_pitch(-self.rotation_speed)
+		if key[pg.K_DOWN]:
+			self.camera_pitch(self.rotation_speed)
 
 
 	def translate(self, pos):

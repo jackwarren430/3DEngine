@@ -42,7 +42,8 @@ class SoftwareRender:
 	def run(self):
 		while True:
 			self.draw()
-			self.camera.control()
+			self.object.control()
+			#self.camera.control()
 			#self.object.rotate_x(self.camera.rotation_speed / 2)
 			for i in pg.event.get():
 				if i.type == pg.QUIT: exit()

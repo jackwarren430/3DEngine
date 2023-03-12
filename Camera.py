@@ -74,9 +74,9 @@ class Camera:
 
 	def camera_matrix(self):
 
-		up_text = self.font.render(f"Up: {self.up}", True, (255, 255, 255))
-		forward_text = self.font.render(f"Up: {self.forward}", True, (255, 255, 255))
-		right_text = self.font.render(f"Up: {self.right}", True, (255, 255, 255))
+		up_text = self.font.render(f"up: {self.up}", True, (255, 255, 255))
+		forward_text = self.font.render(f"forward: {self.forward}", True, (255, 255, 255))
+		right_text = self.font.render(f"right: {self.right}", True, (255, 255, 255))
 
 		self.render.screen.blit(up_text, (10, 10))
 		self.render.screen.blit(forward_text, (10, 30))
