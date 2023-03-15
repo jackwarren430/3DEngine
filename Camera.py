@@ -49,31 +49,28 @@ class Camera:
 	def camera_pitch(self, angle):
 		rotate = rotate_x(angle)
 		
-		rx, ry, rz, w = self.right
-		fx, fy, fz, w = self.forward
-		ux, uy, uz, w = self.up
+		rx, ry, rz, rw = self.right
+		fx, fy, fz, fw = self.forward
+		ux, uy, uz, uw = self.up
 		mat = np.array([
 			[rx, ux, fx, 0],
 			[ry, uy, fy, 0],
 			[rz, uz, fz, 0],
-			[0, 0, 0, 1]
+			[rw, uw, fw, 1]
 		])
-		print("---mat---")
-		print(mat)
-		print(np.linalg.det(mat))
-		print("---end---")
-		inverse = np.linalg.inv(mat)
+		
+		#inverse = np.linalg.inv(mat)
 
 		mat = mat @ rotate
-		mat = inverse @ mat
 		
-		self.right = [mat[0][0], mat[1][0], mat[2][0], 1]
-		self.forward = [mat[0][1], mat[1][1], mat[2][1], 1]
-		self.up = [mat[0][1], mat[1][1], mat[2][1], 1]
+		
+		#self.right = [mat[0][0], mat[1][0], mat[2][0], mat[3][0]]
+		#self.forward = [mat[0][1], mat[1][1], mat[2][1], mat[3][1]]
+		#self.up = [mat[0][1], mat[1][1], mat[2][1], mat[3][2]]
 
-		#self.forward = self.forward @ rotate
-		#self.right = self.right @ rotate
-		#self.up = self.up @ rotate	
+		self.forward = self.forward @ rotate
+		self.right = self.right @ rotate
+		self.up = self.up @ rotate	
 
 		#inverse = mat.transpose()
 		
