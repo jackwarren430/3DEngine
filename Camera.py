@@ -13,7 +13,7 @@ class Camera:
 		self.near_plane = 0.1
 		self.far_plane = 100
 		self.moving_speed = 0.04
-		self.rotation_speed = 0.02
+		self.rotation_speed = 0.005
 		self.font = pg.font.SysFont('Arial', 20, bold=True)
 
 	def control(self):
@@ -48,31 +48,45 @@ class Camera:
 
 	def camera_pitch(self, angle):
 		rotate = rotate_x(angle)
-		self.forward = self.forward @ rotate
-		self.right = self.right @ rotate
-		self.up = self.up @ rotate	
-
+		
 		rx, ry, rz, w = self.right
 		fx, fy, fz, w = self.forward
 		ux, uy, uz, w = self.up
 		mat = np.array([
-			[rx, ux, fx],
-			[ry, uy, fy],
-			[rz, uz, fz]
+			[rx, ux, fx, 0],
+			[ry, uy, fy, 0],
+			[rz, uz, fz, 0],
+			[0, 0, 0, 1]
 		])
-		inverse = np.linalg.inv(mat)
+		print("---mat---")
 		print(mat)
-		print(inverse)
-		inverse = np.append(inverse[0], [0]),
-		print(inverse)
-		inverse = np.append(inverse[1], [0]),
-		inverse = np.append(inverse[2], [0]),
-		inverse = np.append(inverse, [[0, 0, 0, 1]])
-		print(inverse)
+		print(np.linalg.det(mat))
+		print("---end---")
+		inverse = np.linalg.inv(mat)
 
-		self.forward = self.forward @ inverse
-		self.right = self.right @ inverse
-		self.up = self.up @ inverse
+		mat = mat @ rotate
+		mat = inverse @ mat
+		
+		self.right = [mat[0][0], mat[1][0], mat[2][0], 1]
+		self.forward = [mat[0][1], mat[1][1], mat[2][1], 1]
+		self.up = [mat[0][1], mat[1][1], mat[2][1], 1]
+
+		#self.forward = self.forward @ rotate
+		#self.right = self.right @ rotate
+		#self.up = self.up @ rotate	
+
+		#inverse = mat.transpose()
+		
+		#r1 = np.append(inverse[0], [0]),
+		#r2 = np.append(inverse[1], [0]),
+		#r3 = np.append(inverse[2], [0]),
+		#r4 = np.array([0, 0, 0, 1])
+		
+		#inverse = np.array([r1, r2, r3, r4])
+		#print(inverse)
+		#self.forward = inverse @ self.forward
+		#self.right = inverse @ self.right
+		#self.up = inverse @ self.up
 
 	def translate_matrix(self):
 		x, y, z, w = self.position

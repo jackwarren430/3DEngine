@@ -36,7 +36,7 @@ class SoftwareRender:
 		self.screen.fill(pg.Color('darkslategray'))
 		self.world_axes.draw()
 		self.axes.draw()
-		self.camera_axes.draw()
+		#self.camera_axes.draw()
 		self.object.draw()
 
 	def run(self):
