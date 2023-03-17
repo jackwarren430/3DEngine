@@ -56,34 +56,21 @@ class Camera:
 			[rx, ux, fx, 0],
 			[ry, uy, fy, 0],
 			[rz, uz, fz, 0],
-			[rw, uw, fw, 1]
+			[0, 0, 0, 1]
 		])
 		
-		#inverse = np.linalg.inv(mat)
 
 		mat = mat @ rotate
 		
 		
-		#self.right = [mat[0][0], mat[1][0], mat[2][0], mat[3][0]]
-		#self.forward = [mat[0][1], mat[1][1], mat[2][1], mat[3][1]]
-		#self.up = [mat[0][1], mat[1][1], mat[2][1], mat[3][2]]
+		self.right = [mat[0][0], mat[1][0], mat[2][0], 1]
+		self.forward = [mat[0][1], mat[1][1], mat[2][1], 1]
+		self.up = [mat[0][2], mat[1][2], mat[2][2], 1]
 
-		self.forward = self.forward @ rotate
-		self.right = self.right @ rotate
-		self.up = self.up @ rotate	
+		#self.forward = self.forward @ rotate
+		#self.right = self.right @ rotate
+		#self.up = self.up @ rotate	
 
-		#inverse = mat.transpose()
-		
-		#r1 = np.append(inverse[0], [0]),
-		#r2 = np.append(inverse[1], [0]),
-		#r3 = np.append(inverse[2], [0]),
-		#r4 = np.array([0, 0, 0, 1])
-		
-		#inverse = np.array([r1, r2, r3, r4])
-		#print(inverse)
-		#self.forward = inverse @ self.forward
-		#self.right = inverse @ self.right
-		#self.up = inverse @ self.up
 
 	def translate_matrix(self):
 		x, y, z, w = self.position
