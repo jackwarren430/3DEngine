@@ -14,12 +14,13 @@ class SoftwareRender:
 		self.screen = pg.display.set_mode(self.RES)
 		self.clock = pg.time.Clock()
 		self.create_objects()
-
+		self.mouse_update_tick = 0
+		pg.mouse.set_pos(self.H_WIDTH, self.H_HEIGHT)
 
 	def create_objects(self):
 		self.camera = Camera(self, [-5, 5, -50])
 		self.projection = Projection(self)
-		self.object = self.get_object_from_file('./objects/lego_man.obj')
+		self.object = self.get_object_from_file('./objects/sphere.obj')
 
 	def get_object_from_file(self, filename):
 		vertex, faces = [], []
@@ -37,17 +38,24 @@ class SoftwareRender:
 		self.screen.fill(pg.Color('darkslategray'))
 		self.object.draw()
 
+	def update_mouse(self):
+		if self.mouse_update_tick >= 30:
+			pg.mouse.set_pos(self.H_WIDTH, self.H_HEIGHT)
+			self.mouse_update_tick = 0
+		else:
+			self.mouse_update_tick += 1
+
 	def run(self):
 		while True:
-			self.draw()
-			#self.object.control()
-			self.camera.control()
-			#self.object.rotate_x(self.camera.rotation_speed / 2)
 			for i in pg.event.get():
 				if i.type == pg.QUIT: exit()
 			pg.display.set_caption(str(self.clock.get_fps()))
 			pg.display.flip()
 			self.clock.tick(self.FPS)
+			self.camera.control()
+			self.update_mouse()
+			self.draw()
+			
 
 if __name__ == '__main__':
 	app = SoftwareRender()
