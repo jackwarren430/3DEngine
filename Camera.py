@@ -12,8 +12,8 @@ class Camera:
 		self.v_fov = self.h_fov * (render.HEIGHT / render.WIDTH)
 		self.near_plane = 0.1
 		self.far_plane = 100
-		self.moving_speed = 0.04
-		self.rotation_speed = 0.005
+		self.moving_speed = 0.06
+		self.rotation_speed = 0.01
 		self.font = pg.font.SysFont('Arial', 20, bold=True)
 
 	def control(self):
@@ -31,14 +31,19 @@ class Camera:
 		if key[pg.K_e]:
 			self.position -= self.up * self.moving_speed
 
+		vx, vy = pg.mouse.get_rel()
+		self.camera_yaw(vx/300)
+		self.camera_pitch(-vy/300)
+
 		if key[pg.K_LEFT]:
 			self.camera_yaw(-self.rotation_speed)
 		if key[pg.K_RIGHT]:
 			self.camera_yaw(self.rotation_speed)
 		if key[pg.K_UP]:
-			self.camera_pitch(-self.rotation_speed)
-		if key[pg.K_DOWN]:
 			self.camera_pitch(self.rotation_speed)
+		if key[pg.K_DOWN]:
+			self.camera_pitch(-self.rotation_speed)
+		
 
 	def camera_yaw(self, angle):
 		rotate = rotate_y(angle)
@@ -58,19 +63,12 @@ class Camera:
 			[rz, uz, fz, 0],
 			[0, 0, 0, 1]
 		])
-		
 
 		mat = mat @ rotate
 		
-		
-		self.right = [mat[0][0], mat[1][0], mat[2][0], 1]
-		self.forward = [mat[0][1], mat[1][1], mat[2][1], 1]
-		self.up = [mat[0][2], mat[1][2], mat[2][2], 1]
-
-		#self.forward = self.forward @ rotate
-		#self.right = self.right @ rotate
-		#self.up = self.up @ rotate	
-
+		self.right = np.array([mat[0][0], mat[1][0], mat[2][0], 1])
+		self.up = np.array([mat[0][1], mat[1][1], mat[2][1], 1])
+		self.forward = np.array([mat[0][2], mat[1][2], mat[2][2], 1])
 
 	def translate_matrix(self):
 		x, y, z, w = self.position
@@ -95,15 +93,5 @@ class Camera:
 
 
 	def camera_matrix(self):
-
-		up_text = self.font.render(f"up: {self.up}", True, (255, 255, 255))
-		forward_text = self.font.render(f"forward: {self.forward}", True, (255, 255, 255))
-		right_text = self.font.render(f"right: {self.right}", True, (255, 255, 255))
-
-		self.render.screen.blit(up_text, (10, 10))
-		self.render.screen.blit(forward_text, (10, 30))
-		self.render.screen.blit(right_text, (10, 50))
-
-
 		return self.translate_matrix() @ self.rotate_matrix()
 
