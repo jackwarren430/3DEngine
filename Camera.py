@@ -31,9 +31,7 @@ class Camera:
 		if key[pg.K_e]:
 			self.position -= self.up * self.moving_speed
 
-		vx, vy = pg.mouse.get_rel()
-		self.camera_yaw(vx/300)
-		self.camera_pitch(-vy/300)
+		
 
 		if key[pg.K_LEFT]:
 			self.camera_yaw(-self.rotation_speed)
@@ -44,6 +42,18 @@ class Camera:
 		if key[pg.K_DOWN]:
 			self.camera_pitch(-self.rotation_speed)
 		
+		self.mouse_control()
+
+	def mouse_control(self):
+		if self.render.mouse_update_tick >= 30:
+			pg.mouse.set_pos(self.render.H_WIDTH, self.render.H_HEIGHT)
+			vx, vy = pg.mouse.get_rel()
+			self.render.mouse_update_tick = 0
+		else:
+			vx, vy = pg.mouse.get_rel()
+			self.camera_yaw(vx/300)
+			self.camera_pitch(-vy/300)
+			self.render.mouse_update_tick += 1
 
 	def camera_yaw(self, angle):
 		rotate = rotate_y(angle)

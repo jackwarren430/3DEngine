@@ -38,13 +38,6 @@ class SoftwareRender:
 		self.screen.fill(pg.Color('darkslategray'))
 		self.object.draw()
 
-	def update_mouse(self):
-		if self.mouse_update_tick >= 30:
-			pg.mouse.set_pos(self.H_WIDTH, self.H_HEIGHT)
-			self.mouse_update_tick = 0
-		else:
-			self.mouse_update_tick += 1
-
 	def run(self):
 		while True:
 			for i in pg.event.get():
@@ -53,7 +46,6 @@ class SoftwareRender:
 			pg.display.flip()
 			self.clock.tick(self.FPS)
 			self.camera.control()
-			self.update_mouse()
 			self.draw()
 			
 
